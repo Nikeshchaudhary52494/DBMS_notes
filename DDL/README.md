@@ -1,5 +1,3 @@
-# Database management System notes
-
 ## DDL
 DDL (Data Definition Language) commands in DBMS are used to define, modify, and manage the structure of database objects such as tables, schemas, indexes, and more. These commands are primarily used to define the database schema. 
 
