@@ -154,3 +154,114 @@ END;
 3. Document procedures with comments for clarity.
 4. Use OUT parameters only when necessary.
 5. Avoid excessive logic inside a single procedure—opt for modularization.
+
+**Advantages of Procedures in PL/SQL:**
+
+* **Performance:**
+    * **Reduced Network Traffic:** Stored procedures execute on the database server, minimizing data transfer between the application and the database. This significantly reduces network traffic and improves performance.
+    * **Pre-compiled Code:** Procedures are compiled once and stored in the database. This eliminates the need for repeated compilation, leading to faster execution times.
+    * **Optimized Execution:** The database engine can optimize the execution plan for a stored procedure, resulting in more efficient processing.
+
+* **Reusability:**
+    * **Modular Design:** Procedures encapsulate specific tasks, making them reusable across different applications and parts of the same application. This reduces code duplication and improves code maintainability.
+
+* **Security:**
+    * **Centralized Access Control:** Database administrators can grant or deny access to specific procedures, enhancing data security.
+    * **Reduced Exposure:** By encapsulating business logic within procedures, you minimize the exposure of sensitive data to the application layer.
+
+* **Maintainability:**
+    * **Easier to Modify:** Changes to business logic can be made in one place (the procedure) and easily propagated to all applications that use it.
+    * **Improved Code Organization:** Procedures promote a structured and modular approach to database development, making code easier to understand and maintain.
+
+* **Data Integrity:**
+    * **Enforce Business Rules:** Procedures can be used to enforce complex business rules and constraints, ensuring data consistency and integrity.
+
+**Disadvantages of Procedures in PL/SQL:**
+
+* **Complexity:**
+    * **Development and Debugging:** Developing and debugging complex procedures can be more challenging than writing simple SQL statements.
+    * **Maintenance:** Maintaining large and complex procedures can be time-consuming and error-prone.
+
+* **Portability:**
+    * **Database Dependency:** Procedures are typically specific to the database system they are created in. Porting procedures to another database system can be difficult and may require significant modifications.
+
+* **Performance Issues:**
+    * **Overly Complex Procedures:** Inefficiently designed procedures can negatively impact database performance.
+    * **Resource Consumption:** Procedures consume database resources, and excessive use can lead to performance bottlenecks.
+
+* **Debugging Challenges:**
+    * **Limited Debugging Tools:** Debugging stored procedures can be more challenging compared to client-side code due to limited debugging tools and environments.
+
+* **Security Risks:**
+    * **Vulnerabilities:** Poorly written procedures can introduce security vulnerabilities, such as SQL injection.
+
+In summary, PL/SQL procedures offer significant advantages in terms of performance, reusability, security, and maintainability. However, they also have potential drawbacks, including complexity, portability issues, and potential performance impacts if not designed and implemented carefully. 
+
+The decision to use procedures should be based on a thorough evaluation of the specific needs and requirements of the application.
+
+## Exaple of procedure
+
+```sql
+CREATE OR REPLACE PROCEDURE calculate_total_price(
+    product_id IN NUMBER,
+    quantity IN NUMBER,
+    total_price OUT NUMBER
+)
+IS
+    unit_price NUMBER; 
+BEGIN
+    -- Declare and initialize local variable
+    unit_price := 0; 
+
+    SELECT price 
+    INTO unit_price
+    FROM products
+    WHERE product_id = product_id;
+
+    total_price := unit_price * quantity;
+END calculate_total_price;
+/
+```
+
+**Explanation:**
+
+1. **Procedure Definition:**
+   - `CREATE OR REPLACE PROCEDURE`: Defines a procedure named `calculate_total_price`.
+   - `product_id IN NUMBER`: Input parameter for the product ID.
+   - `quantity IN NUMBER`: Input parameter for the quantity.
+   - `total_price OUT NUMBER`: Output parameter to store the calculated total price.
+
+2. **Local Variable Declaration:**
+   - `unit_price NUMBER;`: Declares a local variable named `unit_price` of type `NUMBER` to store the unit price of the product.
+
+3. **Procedure Body:**
+   - `SELECT price INTO unit_price ...`: Retrieves the unit price of the product from the `products` table and stores it in the `unit_price` variable.
+   - `total_price := unit_price * quantity;`: Calculates the total price by multiplying the `unit_price` with the `quantity` and assigns the result to the `total_price` output parameter.
+
+**How to Execute the Procedure:**
+
+```sql
+DECLARE
+    l_total_price NUMBER;
+BEGIN
+    calculate_total_price(101, 5, l_total_price); -- Call the procedure with input values
+    DBMS_OUTPUT.PUT_LINE('Total Price: ' || l_total_price); 
+END;
+/
+```
+
+**Explanation:**
+
+1. **DECLARE Block:**
+   - `l_total_price NUMBER;`: Declares a local variable to store the result of the procedure call.
+
+2. **Procedure Call:**
+   - `calculate_total_price(101, 5, l_total_price);`: Calls the `calculate_total_price` procedure with the following arguments:
+      - `product_id`: 101
+      - `quantity`: 5
+      - `l_total_price`: The variable to receive the calculated total price.
+
+3. **Output:**
+   - `DBMS_OUTPUT.PUT_LINE(...)`: Displays the calculated `l_total_price` on the console.
+
+This example demonstrates how to declare and use local variables within a PL/SQL procedure, as well as how to execute the procedure and retrieve the output value.
